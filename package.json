@@ -1,6 +1,6 @@
 {
-  "name": "the-neutron-star-ui",
-  "private": true,
+  "name": "@masummillat/the-neutron-star-ui",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -8,11 +8,21 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test-storybook": "test-storybook",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+  },
+  "author": "Masum Millat",
+  "repository": {
+    "url": "https://github.com/masummillat/the-neutron-star-ui.git."
   },
   "dependencies": {
+    "clsx": "^1.2.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "twind": "^0.16.19"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.0.0-beta.40",
@@ -21,16 +31,27 @@
     "@storybook/blocks": "^7.0.0-beta.40",
     "@storybook/react": "^7.0.0-beta.40",
     "@storybook/react-vite": "^7.0.0-beta.40",
+    "@storybook/test-runner": "^0.9.4",
     "@storybook/testing-library": "^0.0.14-next.1",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.13",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-standard-with-typescript": "^34.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
     "postcss": "^8.4.21",
+    "prettier": "^2.8.3",
     "prop-types": "^15.8.1",
     "storybook": "^7.0.0-beta.40",
     "tailwindcss": "^3.2.4",
-    "typescript": "^4.9.3",
+    "typescript": "*",
     "vite": "^4.1.0"
   }
 }
