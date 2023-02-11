@@ -3,6 +3,9 @@
   "private": false,
   "version": "0.0.1",
   "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -10,6 +13,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
+    "rollup": "rollup -c",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
@@ -24,7 +28,17 @@
     "react-dom": "^18.2.0",
     "twind": "^0.16.19"
   },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.2.4"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@storybook/addon-essentials": "^7.0.0-beta.40",
     "@storybook/addon-interactions": "^7.0.0-beta.40",
     "@storybook/addon-links": "^7.0.0-beta.40",
@@ -38,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.13",
+    "cross-env": "^7.0.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard-with-typescript": "^34.0.0",
@@ -49,9 +64,18 @@
     "postcss": "^8.4.21",
     "prettier": "^2.8.3",
     "prop-types": "^15.8.1",
+    "rollup-plugin-dts": "^5.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-scss": "^4.0.0",
+    "sass": "^1.58.0",
     "storybook": "^7.0.0-beta.40",
     "tailwindcss": "^3.2.4",
     "typescript": "*",
     "vite": "^4.1.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/masummillat/the-neutron-start-ui/issues"
+  },
+  "homepage": "https://github.com/masummillat/the-neutron-start-ui#readme"
 }

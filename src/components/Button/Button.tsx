@@ -1,34 +1,14 @@
 import React from 'react';
 import { clsx } from 'clsx';
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * What background color to use
-   */
-  buttonStyle?: React.CSSProperties | undefined;
-  /**
-   * How large should the button be?
-   */
-  size?: 'small' | 'medium' | 'large';
-  /**
-   * Button contents
-   */
-  label: string;
-  /**
-   * Button style type
-   */
-  buttonType?: 'filled' | 'outlined' | 'text' | 'elevated' | 'tonal';
-  icon?: React.ReactNode;
-  loading?: boolean;
-}
+import { ButtonProps } from './Button.types';
 
 /**
  * Primary UI component for user interaction
  */
-export const Button = ({
+const Button = ({
   size = 'medium',
   buttonStyle,
-  buttonType,
+  buttonType = 'filled',
   label,
   icon,
   loading,
@@ -54,3 +34,5 @@ export const Button = ({
     </button>
   );
 };
+
+export default Button;
