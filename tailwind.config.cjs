@@ -19,7 +19,8 @@ module.exports = {
           99: '#FFFBFE',
           100: '#FFFFFF'
         },
-        none: 'none'
+        none: 'none',
+        transparent: 'transparent'
       }
     }
   },
