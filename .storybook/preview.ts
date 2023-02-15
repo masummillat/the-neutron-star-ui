@@ -6,5 +6,10 @@ export const parameters = {
       color: /(background|color)$/i,
       date: /Date$/,
     },
+    darkMode: {
+      darkClass: 'dark',
+      lightClass: 'light',
+      classTarget: 'html'
+    }
   },
 }
