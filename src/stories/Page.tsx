@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, Checkbox } from '../components';
 
 import { Header } from './Header';
 import './page.css';
@@ -18,6 +19,11 @@ export const Page: React.FC = () => {
         onLogout={() => setUser(undefined)}
         onCreateAccount={() => setUser({ name: 'Jane Doe' })}
       />
+      <Checkbox
+        label="my checkbox"
+        onChange={(value: boolean) => console.log(value)}
+        checked={false}
+      />
 
       <section>
         <h2>Pages in Storybook</h2>
@@ -28,11 +34,13 @@ export const Page: React.FC = () => {
           </a>{' '}
           process starting with atomic components and ending with pages.
         </p>
-        <p>
-          Render pages with mock data. This makes it easy to build and review page states without
-          needing to navigate to them in your app. Here are some handy patterns for managing page
-          data in Storybook:
-        </p>
+        <Card>
+          <p>
+            Render pages with mock data. This makes it easy to build and review page states without
+            needing to navigate to them in your app. Here are some handy patterns for managing page
+            data in Storybook:
+          </p>
+        </Card>
         <ul>
           <li>
             Use a higher-level connected component. Storybook helps you compose such data from the

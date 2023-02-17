@@ -14,6 +14,9 @@ yarn add @masummillat/the-neutron-star-ui
 ## Usage
 
 ```JavaScript
+import "@masummillat/the-neutron-star-ui/dist/esm/index.css";
+Or
+import "@masummillat/the-neutron-star-ui/dist/cjs/index.css";
 import { Button } from '@masummillat/the-neutron-star-ui';
 
 ```
