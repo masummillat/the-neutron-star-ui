@@ -1,35 +1,35 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card} from '../../components'
+import { Avatar } from '../../components'
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta = {
-  title: 'Example/Card',
-  component: Card,
+  title: 'Example/Avatar',
+  component: Avatar,
   tags: ['autodocs'],
   argTypes: {
     // backgroundColor: { control: 'color' },
   },
-} satisfies Meta<typeof Card>;
+} satisfies Meta<typeof Avatar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
-export const SimpleCard: Story = {
+export const SmallAvatar: Story = {
   args: {
-    wrapperClass: 'shadow'
+    size: 'sm'
   },
 };
-export const SimpleCardMedium: Story = {
-  args: {
-    wrapperClass: 'shadow-md'
-  },
-};
-export const SimpleCardLargeShadow: Story = {
-  args: {
-    wrapperClass: 'shadow-lg'
-  },
-};
+export const MediumAvatar: Story = {
+    args: {
+      size: 'md'
+    },
+  };
+  export const LargeAvatar: Story = {
+    args: {
+      size: 'lg'
+    },
+  };
 
 
 
