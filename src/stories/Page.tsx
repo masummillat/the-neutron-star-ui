@@ -24,9 +24,39 @@ export const Page: React.FC = () => {
         onChange={(value: boolean) => console.log(value)}
         checked={false}
       />
-      <article className="prose lg:prose-xl">
-        <Typography variant="title-h1-40-bold" className="kjkh">
+      <article className="prose lg:prose-2xl">
+        <Typography variant="h1-128-regular" className="kjkh">
           my heloo
+        </Typography>
+        <Typography variant="h1-128-medium" className="kjkh">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-128-medium" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-128-bold" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-96-regular" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-96-medium" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-96-bold" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-72-regular" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-72-medium" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="h1-72-bold" className="">
+          my heloo medium
+        </Typography>
+        <Typography variant="caption-12-regular" className="">
+          my heloo medium
         </Typography>
       </article>
 
