@@ -14,7 +14,6 @@ const Typography: React.FC<TypographyProps> = ({
   ...props
 }) => {
   const getVariantMapping = defaultVariantMapping.get(variant.split('-')[0]);
-  console.log(getVariantMapping);
   return (
     <>
       {React.createElement(
