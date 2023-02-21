@@ -1,4 +1,5 @@
-import 'tailwindcss/tailwind.css'
+import 'tailwindcss/tailwind.css';
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -6,10 +7,18 @@ export const parameters = {
       color: /(background|color)$/i,
       date: /Date$/,
     },
-    darkMode: {
-      darkClass: 'dark',
-      lightClass: 'light',
-      classTarget: 'html'
-    }
   },
+  darkMode: {
+    current: 'light',
+    // Override the default dark theme
+    dark: {  appBg: 'black' },
+    // Override the default light theme
+    light: {  appBg: 'white' },
+    stylePreview: true,
+  }
 }
+
+
+export const globalTypes = {
+  darkMode: true,
+};
