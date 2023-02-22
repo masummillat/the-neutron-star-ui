@@ -8,13 +8,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
      */
     size?: "small" | "medium" | "large";
     /**
-     * Button contents
-     */
-    label: string;
-    /**
      * Button style type
      */
     buttonType?: "filled" | "outlined" | "text" | "elevated" | "tonal";
     icon?: React.ReactNode;
     loading?: boolean;
+    className?: string;
   }

@@ -6,7 +6,8 @@ const defaultImg =
 const Avatar: React.FC<AvatarProps> = ({
   size = 'md',
   alt,
-  src = defaultImg
+  src = defaultImg,
+  className
 }) => {
   const sizes = new Map([
     ['sm', 'h-8 w-8'],
@@ -16,8 +17,9 @@ const Avatar: React.FC<AvatarProps> = ({
   return (
     <img
       className={clsx(
-        'inline-block rounded-full ring-2 ring-white',
-        sizes.get(size)
+        'inline-block rounded-full ring-2 ring-white object-cover ',
+        sizes.get(size),
+        className
       )}
       src={src}
       alt={alt || ''}
