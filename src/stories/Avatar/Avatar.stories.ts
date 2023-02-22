@@ -30,6 +30,12 @@ export const MediumAvatar: Story = {
       size: 'lg'
     },
   };
+  export const AvatarWithClass: Story = {
+    args: {
+      size: 'lg',
+      className: 'ring-primary-40'
+    },
+  };
 
 
 

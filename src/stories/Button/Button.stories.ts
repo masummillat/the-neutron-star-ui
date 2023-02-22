@@ -17,43 +17,43 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const Filled: Story = {
   args: {
-    label: 'Button',
+    children: "button"
   },
 };
 
 export const Outlined: Story = {
   args: {
-    label: 'Button',
+    children: "button",
     buttonType: 'outlined'
   },
 };
 
 export const Text: Story = {
   args: {
+    children: "button",
     size: 'large',
-    label: 'Button',
     buttonType: 'text',
   },
 };
 
 export const Elevated: Story = {
   args: {
+    children: "button",
     size: 'small',
-    label: 'Button',
     buttonType: 'outlined'
   },
 };
 export const Tonal: Story = {
   args: {
+    children: "button",
     size: 'medium',
-    label: 'Outlined',
     buttonType: 'tonal'
   },
 };
 
 export const Disabled: Story = {
   args: {
-    label: 'Button',
+    children: "button",
     disabled: true,
   },
 };

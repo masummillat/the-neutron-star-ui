@@ -14,13 +14,16 @@ const Typography: React.FC<TypographyProps> = ({
   ...props
 }) => {
   const getVariantMapping = defaultVariantMapping.get(variant.split('-')[0]);
-  console.log(getVariantMapping);
   return (
     <>
       {React.createElement(
         as || getVariantMapping || 'div',
         {
-          className: clsx(className, TypographClasses.get(variant) || ''),
+          className: clsx(
+            TypographClasses.get(variant),
+            'dark:text-white',
+            className || ''
+          ),
           ...props
         },
         [children]

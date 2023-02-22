@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Checkbox, Typography } from '../components';
+import { Button, Card, Checkbox, Typography } from '../components';
 
 import { Header } from './Header';
 import './page.css';
@@ -59,7 +59,7 @@ export const Page: React.FC = () => {
           my heloo medium
         </Typography>
       </article>
-
+      <Button className="bg-red-600"> Hello</Button>
       <section>
         <h2>Pages in Storybook</h2>
         <p>

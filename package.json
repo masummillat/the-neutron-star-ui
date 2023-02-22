@@ -1,6 +1,6 @@
 {
   "name": "@masummillat/the-neutron-star-ui",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "type": "module",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.js",
@@ -25,15 +25,13 @@
     "url": "https://github.com/masummillat/the-neutron-star-ui.git."
   },
   "dependencies": {
-    "clsx": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "twind": "^0.16.19"
   },
   "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tailwindcss": "^3.2.4"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
@@ -55,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.13",
+    "clsx": "^1.2.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.6.0",
@@ -73,6 +72,7 @@
     "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.58.0",
     "storybook": "^7.0.0-beta.40",
+    "storybook-dark-mode": "^2.1.0",
     "tailwindcss": "^3.2.4",
     "typescript": "*",
     "vite": "^4.1.0"
