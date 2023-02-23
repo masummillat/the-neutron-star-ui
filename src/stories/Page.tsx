@@ -1,5 +1,11 @@
 import React from 'react';
-import { Button, Card, Checkbox, Typography } from '../components';
+import {
+  Button,
+  Card,
+  Checkbox,
+  NeutronEditor,
+  Typography
+} from '../components';
 
 import { Header } from './Header';
 import './page.css';
@@ -19,6 +25,7 @@ export const Page: React.FC = () => {
         onLogout={() => setUser(undefined)}
         onCreateAccount={() => setUser({ name: 'Jane Doe' })}
       />
+      <NeutronEditor />
       <Checkbox
         label="my checkbox"
         onChange={(value: boolean) => console.log(value)}

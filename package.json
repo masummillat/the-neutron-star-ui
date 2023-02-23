@@ -25,9 +25,9 @@
     "url": "https://github.com/masummillat/the-neutron-star-ui.git."
   },
   "dependencies": {
+    "draft-js": "^0.11.7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "twind": "^0.16.19"
+    "react-dom": "^18.2.0"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -48,6 +48,7 @@
     "@storybook/test-runner": "^0.9.4",
     "@storybook/testing-library": "^0.0.14-next.1",
     "@tailwindcss/typography": "^0.5.9",
+    "@types/draft-js": "^0.11.10",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
