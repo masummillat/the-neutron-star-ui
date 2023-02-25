@@ -1,35 +1,57 @@
-import React, {
-  KeyboardEvent,
-  MutableRefObject,
-  useRef,
-  useState
-} from 'react';
+import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import {
   Editor,
   EditorState,
   RichUtils,
   CompositeDecorator,
-  getDefaultKeyBinding
+  getDefaultKeyBinding,
+  getVisibleSelectionRect,
+  convertToRaw,
+  RawDraftContentState,
+  convertFromRaw
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { NeutronEditorProps } from './NeutronEditor.types';
 import Link from './Link';
 import {
   findLinkEntities,
+  getTextSelection,
   handleStrategy,
   hashtagStrategy,
+  mediaBlockRenderer,
   styleMap
 } from './helperFunctions';
-import InlineStyleControls from './InlineStyleControls';
 import BlockStyleControls from './BlockStyleControls';
 import HandleSpan from './HandleSpan';
 import HashtagSpan from './HashTagSpan';
+import SidebarToolbox from './SidebarToolbox';
+import InlineToolbar from './InlineToobar';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 const NeutronEditor: React.FC<NeutronEditorProps> = ({
   placeholder = 'Write your story here ...'
 }) => {
-  const refs = useRef<any>();
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const editorRef = useRef<any>();
+  const [showInlineToolbar, setShowInlineToobar] = useState<boolean>(false);
+  const [currentToolbarPosition, setCurrentToolbarPosition] = useState<{
+    top: number;
+    left: number;
+    right: number;
+    bottom: number;
+  } | null>(null);
+  const [sideTBP, setSideTBP] = useState<{
+    top: number;
+    left: number;
+    right: number;
+    bottom: number;
+  }>({
+    top: 100,
+    left: -30,
+    right: 0,
+    bottom: 0
+  });
+  const [showSidbarToolbox, setShowSideBarToolbox] = useState<boolean>(false);
+
   const decorator = new CompositeDecorator([
     {
       strategy: findLinkEntities,
@@ -47,15 +69,61 @@ const NeutronEditor: React.FC<NeutronEditorProps> = ({
   const [editorState, setEditorState] = useState<EditorState>(
     EditorState.createEmpty(decorator)
   );
-  const [showURLInput, setShowURLInput] = useState<boolean>(false);
-  const [urlValue, setUrlValue] = useState<string>('');
+
+  // click outside of Editor will close the sidetool bar if opened
+  const [editorWrapperRef] = useOnClickOutside(() => {
+    if (showSidbarToolbox) handleHideSidbarToolbox();
+  });
+
+  // close inline toolbar
+  const handleCloseInlineToolbar = () => setShowInlineToobar(false);
+
+  const handleHideSidbarToolbox = () => {
+    setShowSideBarToolbox(false);
+  };
 
   const onChange = (newState: EditorState) => {
+    // Convert to raw js object
+    const raw = convertToRaw(editorState.getCurrentContent());
+    // Save raw js object to local storage
+    saveEditorContent(raw);
     setEditorState(newState);
   };
 
-  const toggleInlineStyle = (inlineStyle: string) => {
-    onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+  const saveEditorContent = (data: RawDraftContentState) => {
+    localStorage.setItem('editorData', JSON.stringify(data));
+  };
+
+  const getSavedEditorData = () => {
+    const savedData = localStorage.getItem('editorData');
+
+    return savedData ? JSON.parse(savedData) : null;
+  };
+  // Load editor data (raw js object) from local storage
+  useEffect(() => {
+    const rawEditorData = getSavedEditorData();
+    if (rawEditorData !== null) {
+      const contentState = convertFromRaw(rawEditorData);
+      setEditorState(EditorState.createWithContent(contentState));
+    }
+  }, []);
+
+  const renderContentAsRawJs = () => {
+    const contentState = editorState.getCurrentContent();
+    const raw = convertToRaw(contentState);
+
+    return JSON.stringify(raw, null, 2);
+  };
+  const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setSideTBP((p) => ({
+      ...p,
+      top: e?.target?.clientHeight - 20
+    }));
+
+    setShowSideBarToolbox(true);
+  };
+  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    // handleHideSidbarToolbox();
   };
 
   const toggleBlockType = (blockType: string) => {
@@ -63,6 +131,18 @@ const NeutronEditor: React.FC<NeutronEditorProps> = ({
   };
 
   const mapKeyToEditorCommand = (e: KeyboardEvent) => {
+    if (showInlineToolbar) setShowInlineToobar(false);
+    if (showSidbarToolbox) {
+      handleHideSidbarToolbox();
+    }
+    if (e?.keyCode === 13) {
+      setShowSideBarToolbox(true);
+      const target = e?.target as HTMLInputElement;
+      setSideTBP((p) => ({
+        ...p,
+        top: target?.clientHeight
+      }));
+    }
     if (e.keyCode === 9 /* TAB */) {
       const newEditorState = RichUtils.onTab(e, editorState, 4 /* maxDepth */);
       if (newEditorState !== editorState) {
@@ -76,7 +156,6 @@ const NeutronEditor: React.FC<NeutronEditorProps> = ({
 
   const handleKeyCommand = (command: string, editorState: EditorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
-
     if (newState) {
       onChange(newState);
       return 'handled';
@@ -85,103 +164,64 @@ const NeutronEditor: React.FC<NeutronEditorProps> = ({
     return 'not-handled';
   };
 
-  const _promptForLink = () => {
-    const selection = editorState.getSelection();
-    if (!selection.isCollapsed()) {
-      const contentState = editorState.getCurrentContent();
-      const startKey = editorState.getSelection().getStartKey();
-      const startOffset = editorState.getSelection().getStartOffset();
-      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
-      const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+  // Positioning the inline toolbar
+  const contentState = editorState.getCurrentContent();
+  const selection = editorState.getSelection();
+  const text = getTextSelection(contentState, selection);
 
-      let url = '';
-      if (linkKey) {
-        const linkInstance = contentState.getEntity(linkKey);
-        url = linkInstance.getData().url;
-      }
-      setShowURLInput((s) => true);
-      setUrlValue((u) => url);
-      setTimeout(() => inputRef?.current?.focus(), 0);
+  useEffect(() => {
+    if (text) {
+      let position = getVisibleSelectionRect(window);
+      setCurrentToolbarPosition({
+        left: position?.left - 50,
+        right: position?.right,
+        top: position?.top + 10,
+        bottom: position?.bottom
+      });
+      setShowInlineToobar(true);
     }
-  };
-
-  const onURLChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setUrlValue(e.target.value);
-
-  const confirmLink = () => {
-    const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = contentState.createEntity(
-      'LINK',
-      'MUTABLE',
-      { url: urlValue }
-    );
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(editorState, {
-      currentContent: contentStateWithEntity
-    });
-    onChange(
-      RichUtils.toggleLink(
-        newEditorState,
-        newEditorState.getSelection(),
-        entityKey
-      )
-    );
-    setShowURLInput((s) => false);
-    setUrlValue((u) => '');
-    setTimeout(() => refs?.current?.focus(), 0);
-  };
-
-  const onLinkInputKeyDown = (e: KeyboardEvent) => {
-    if (e.keyCode === 13) {
-      confirmLink();
-    }
-  };
-  const removeLink = () => {
-    const selection = editorState.getSelection();
-    if (!selection.isCollapsed()) {
-      onChange(RichUtils.toggleLink(editorState, selection, null));
-    }
-  };
+  }, [text]);
 
   return (
-    <div className="m-2">
-      <div className="flex gap-2">
-        <button onClick={_promptForLink}>Add Link</button>
-        <button onMouseDown={removeLink}>Remove Link</button>
-      </div>
-      <InlineStyleControls
-        editorState={editorState}
-        onToggle={toggleInlineStyle}
-      />
+    <div
+      ref={editorWrapperRef}
+      className="my-2 mx-8 relative prose lg:prose-xl">
       <BlockStyleControls
         editorState={editorState}
         onToggle={toggleBlockType}
       />
-      {showURLInput && (
-        <div>
-          <input
-            onChange={onURLChange}
-            type="text"
-            value={urlValue}
-            onKeyDown={onLinkInputKeyDown}
-            ref={inputRef}
-          />
-          <button onClick={confirmLink}>Confirm</button>
-        </div>
-      )}
-      <div className="border border-gray-300 rounded h-96 p-2 ">
+      <div className="border border-gray-300 rounded h-auto p-2 relative ">
         <Editor
+          onFocus={onFocus}
+          onBlur={onBlur}
+          blockRendererFn={mediaBlockRenderer}
           placeholder={placeholder}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
           handleKeyCommand={handleKeyCommand}
           keyBindingFn={mapKeyToEditorCommand}
           spellCheck={true}
           customStyleMap={styleMap}
           autoCapitalize="sentences"
           autoCorrect="on"
-          ref={refs}
+          ref={editorRef}
         />
+        {showSidbarToolbox && (
+          <SidebarToolbox
+            editorState={editorState}
+            handleHideSidbarToolbox={handleHideSidbarToolbox}
+            onChange={onChange}
+            sideTBP={sideTBP}
+          />
+        )}
+        {currentToolbarPosition && showInlineToolbar && (
+          <InlineToolbar
+            handleCloseInlineToolbar={handleCloseInlineToolbar}
+            position={currentToolbarPosition}
+            editorState={editorState}
+            onChange={onChange}
+          />
+        )}
       </div>
     </div>
   );

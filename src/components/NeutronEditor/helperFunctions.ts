@@ -1,6 +1,10 @@
-import {ContentBlock, ContentState} from 'draft-js';
+import {ContentBlock, ContentState, SelectionState} from 'draft-js';
 import { StyleTypes } from './NeutronEditor.types';
-
+import { ReactComponent as BoldIcon } from '../../assets/icons/bold.svg';
+import { ReactComponent as ItalicIcon } from '../../assets/icons/italic.svg';
+import { ReactComponent as UnderlineIcon } from '../../assets/icons/underline.svg';
+import { ReactComponent as CodeIcon } from '../../assets/icons/code.svg';
+import Media from './Media/Media';
 
 export const BLOCK_TYPES: StyleTypes[] = [
   {label: 'H1', style: 'header-one'},
@@ -16,20 +20,20 @@ export const BLOCK_TYPES: StyleTypes[] = [
 ];
 
 export const INLINE_STYLES: StyleTypes[] = [
-  {label: 'Bold', style: 'BOLD'},
-  {label: 'Italic', style: 'ITALIC'},
-  {label: 'Underline', style: 'UNDERLINE'},
-  {label: 'Monospace', style: 'CODE'},
+  {label: 'Bold', style: 'BOLD', icon: BoldIcon},
+  {label: 'Italic', style: 'ITALIC', icon: ItalicIcon},
+  {label: 'Underline', style: 'UNDERLINE', icon: UnderlineIcon},
+  {label: 'Monospace', style: 'CODE', icon: CodeIcon},
 ];
 
 // Custom overrides for "code" style.
 export const styleMap = {
   CODE: {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
     fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
     fontSize: 16,
-    padding: 8,
-    borderLeft: '5px solid red'
+    padding: '2px 12px',
+    borderRadius: '9999px',
   },
 };
 
@@ -76,3 +80,58 @@ export function findWithRegex(regex: RegExp, contentBlock: ContentBlock, callbac
      callback(start, start + matchArr[0].length);
    }
  }
+
+
+ export function getTextSelection(contentState: ContentState, selection: SelectionState, blockDelimiter?: string) {
+  blockDelimiter = blockDelimiter || '\n';
+  var startKey   = selection.getStartKey();
+  var endKey     = selection.getEndKey();
+  var blocks     = contentState.getBlockMap();
+
+  var lastWasEnd = false;
+  var selectedBlock = blocks
+      .skipUntil(function(block) {
+          return block?.getKey() === startKey;
+      })
+      .takeUntil(function(block) {
+          var result = lastWasEnd;
+
+          if (block?.getKey() === endKey) {
+              lastWasEnd = true;
+          }
+
+          return result;
+      });
+
+  return selectedBlock
+      .map(function(block) {
+          var key = block?.getKey();
+          var text = block?.getText();
+
+          var start = 0;
+          var end = text?.length;
+
+          if (key === startKey) {
+              start = selection.getStartOffset();
+          }
+          if (key === endKey) {
+              end = selection.getEndOffset();
+          }
+
+          text = text?.slice(start, end);
+          return text;
+      })
+      .join(blockDelimiter);
+}
+
+export function mediaBlockRenderer(block: ContentBlock) {
+  if (block.getType() === 'atomic') {
+    console.log('get media called')
+    return {
+      component: Media,
+      editable: false,
+    };
+  }
+
+  return null;
+}

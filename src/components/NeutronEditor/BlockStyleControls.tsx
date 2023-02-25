@@ -13,7 +13,7 @@ const BlockStyleControls: React.FC<BlockStyleControlsProps> = ({
     .getType();
 
   return (
-    <div className="RichEditor-controls">
+    <div className="flex gap-2">
       {BLOCK_TYPES.map((type) => (
         <StyledButton
           key={type.label}
@@ -21,6 +21,7 @@ const BlockStyleControls: React.FC<BlockStyleControlsProps> = ({
           label={type.label}
           onToggle={onToggle}
           style={type.style}
+          icon={type.icon}
         />
       ))}
     </div>
